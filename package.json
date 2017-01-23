@@ -1,0 +1,20 @@
+{
+  "name": "dash-button",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "colors": "^1.1.2",
+    "dotenv": "^4.0.0",
+    "moment": "^2.17.1",
+    "node-dash-button": "^0.6.1",
+    "node-persist": "^2.0.7",
+    "request": "^2.79.0",
+    "twilio": "^2.11.1"
+  }
+}
