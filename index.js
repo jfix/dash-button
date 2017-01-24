@@ -3,13 +3,14 @@ require('colors');
 
 var client = require('twilio')(process.env.TWILIO_ACC_SID, process.env.TWILIO_AUTH_TOKEN);
 var dash_button = require('node-dash-button');
+var greeting = require('greeting');
 var storage = require('node-persist').init({ttl: 8*60*60*1000});
 
-var isMorning = function() {
+function isMorning() {
     var currentHour = new Date().getHours();
     return currentHour > 6 && currentHour < 13
-},
-isEvening = function() {
+};
+function isEvening() {
     var currentHour = new Date().getHours();
     return currentHour > 13 && currentHour < 22
 };
@@ -46,7 +47,7 @@ dash.on("detected", function (dash_id){
 	client.messages.create({
 	    to: process.env.TWILIO_TO_NUMBER,
             from: process.env.TWILIO_FROM_NUMBER,
-            body: smsMessage
+            body: greeing.random() + ', ' + smsMessage
         }, function(err, msg) {
             if (err) {
                 console.log(`Problem sending SMS ${JSON.stringify(err)}`.red);
