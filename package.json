@@ -22,7 +22,7 @@
   "devDependencies": {},
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/jfix/dash-button.git"
+    "url": "ssh://git@github.com/jfix/dash-button.git"
   },
   "bugs": {
     "url": "https://github.com/jfix/dash-button/issues"
