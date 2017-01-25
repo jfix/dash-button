@@ -1,7 +1,7 @@
 {
   "name": "dash-button",
   "version": "1.0.0",
-  "description": "Multifunctional Amazon Dash button hack"
+  "description": "Multifunctional Amazon Dash button hack",
   "main": "index.js",
   "scripts": {
     "start": "node index.js",
