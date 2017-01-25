@@ -1,7 +1,9 @@
 About this
 ----------
 
-I'd like to let my wife know when I have safely arrived at work, or when I'm about to leave the office.  This usually involves sending an SMS. Which usually is difficult because therer is no network in the underground parking garage, nor in the lift, and once arrived on my floor, distractions are manifold.  Pushing a simple button to send a message would be the solution.
+I'd like to let my wife know when I have safely arrived at work, or when I'm about to leave the office.  This usually involves sending an SMS. Which usually is difficult because there is no network in the underground parking garage, nor in the lift, and once arrived on my floor, distractions are manifold.  Pushing a simple button to send a message would be the solution.
+
+Obviously, why not handle another button that will count the cups of coffee consumed every day, by adding a line to a Google Spreadsheet, for example?
 
 Requirements:
 
