@@ -67,7 +67,7 @@ dash.on("detected", function (dash_id){
 
     } else if (dash_id === process.env.MAC_COFFEE) {
         console.log("Somebody just poured a coffee.");
-        var date = moment().format('YYYY-MM-DD');
+        var date = moment().format('YYYY-MM-DD;);
         var time = moment().format('HH:mm'); 
 
         // IFTTT APPROACH
