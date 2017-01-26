@@ -4,6 +4,7 @@ require('colors');
 var client = require('twilio')(process.env.TWILIO_ACC_SID, process.env.TWILIO_AUTH_TOKEN);
 var dash_button = require('node-dash-button');
 var greeting = require('greeting');
+var moment = require('moment');
 var request = require('request');
 var storage = require('node-persist');
 
@@ -66,11 +67,20 @@ dash.on("detected", function (dash_id){
 
     } else if (dash_id === process.env.MAC_COFFEE) {
         console.log("Somebody just poured a coffee.");
+        var date = moment().format('YYYY-MM-DD;);
+        var time = moment().format('HH:mm'); 
 
         // IFTTT APPROACH
-    	request(process.env.IFTTT, function (err, res, body) {
-	    console.log(body);
-        })
+        request({
+            url: process.env.IFTTT,
+            method: "POST",
+            json: {"value1": date, "value2": time, "value3": 1}
+        }, function (err, res, body) {
+           if (err) {
+               console.log('ERRROR: ' + JSON.stringify(err));
+           }
+	   console.log(body);
+        });
 
     // NEW, UNKNOWN BUTTON FOUND
 
