@@ -4,6 +4,7 @@
   "description": "Multifunctional Amazon Dash button hack",
   "main": "index.js",
   "scripts": {
+    "dev": "nodemon index.js",
     "start": "node index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -14,6 +15,7 @@
     "dotenv": "^4.0.0",
     "greeting": "^1.0.6",
     "moment": "^2.17.1",
+    "mongoose": "^4.8.1",
     "node-dash-button": "^0.6.1",
     "node-persist": "^2.0.7",
     "request": "^2.79.0",
