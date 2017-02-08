@@ -2,7 +2,7 @@ var path = require('path');
 require('dotenv').config({path: path.join(__dirname, '.env')});
 require('colors');
 var client = require('twilio')(process.env.TWILIO_ACC_SID, process.env.TWILIO_AUTH_TOKEN);
-var Conso = require('./models/conso');
+//var Conso = require('./models/conso');
 var dash_button = require('node-dash-button');
 var greeting = require('greeting');
 var moment = require('moment');
@@ -93,19 +93,30 @@ dash.on("detected", function (dash_id){
 
         // SAVE DATA INTO MONGO DB
         var date = moment();
+        var mlab_url = `${process.env.MLAB_URL}${process.env.MONGO_DB}/collections/${process.env.MONGO_COLLECTION}?apiKey=${process.env.MLAB_APIKEY}`;
 
-        var aConso = new Conso({
+        var consommation = {
             date,
             month: date.month(),
             week: date.week(),
             weekday: weekdays[date.weekday()],
             hour: date.hour()
-        })
+        };
+        request({
+            url: mlab_url,
+            method: "POST",
+            json: consommation
+        }, function (err, res, body) {
+            if (err) {
+                console.log('ERROR sending stuff to mlab via request: ' + JSON.stringify(err));
+            }
+        });
 
-        aConso.save(function (err, conso) {
-            if (err) return console.error(err)
-            else console.log(`💾  And another coffee consumption saved in db.`)
-        })
+        //var aConso = new Conso(consommation) 
+        //aConso.save(function (err, conso) {
+        //    if (err) return console.error(err)
+        //    else console.log(`💾  And another coffee consumption saved in db.`)
+        //})
 
     // NEW, UNKNOWN BUTTON FOUND
 
