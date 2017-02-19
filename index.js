@@ -100,7 +100,7 @@ dash.on("detected", function (dash_id){
         var mlab_url = `${process.env.MLAB_URL}${process.env.MONGO_DB}/collections/${process.env.MONGO_COLLECTION}?apiKey=${process.env.MLAB_APIKEY}`;
 
         var consommation = {
-            date,
+            date: {"$date": date},
             month: date.month(),
             week: date.week(),
             weekday: weekdays[date.weekday()],
