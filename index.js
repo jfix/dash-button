@@ -6,6 +6,7 @@ var client = require('twilio')(process.env.TWILIO_ACC_SID, process.env.TWILIO_AU
 var dash_button = require('node-dash-button');
 var greeting = require('greeting');
 var moment = require('moment');
+var player = require('play-sound')(opts = {});
 var request = require('request');
 var storage = require('node-persist');
 
@@ -49,6 +50,7 @@ dash.on("detected", function (dash_id){
                 storage.setItemSync("evening_sms", true);
             } else {
                 console.log('✗ Not sending SMS as it already has been sent.'.yellow);
+                player.play('./assets/buzzer.mp3');
                 doSend = false;
             }
         } else {
@@ -66,8 +68,10 @@ dash.on("detected", function (dash_id){
             }, function(err, msg) {
                 if (err) {
                     console.log(`Problem sending SMS ${JSON.stringify(err)}`.red);
+                    player.play('./assets/buzzer.mp3');
                 } else {
                     console.log(`SMS sent with ID ${msg.sid}`.green);
+                    player.play('./assets/swoosh.mp3');
                 }
             });
         }
