@@ -113,6 +113,8 @@ dash.on("detected", function (dash_id){
         }, function (err, res, body) {
             if (err) {
                 console.log('ERROR sending stuff to mlab via request: ' + JSON.stringify(err));
+            } else {
+                player.play('./assets/coffee.mp3');
             }
         });
 
