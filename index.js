@@ -118,31 +118,31 @@ dash.on('detected', function (dashId) {
           if (err) console.log(err)
           else player.play(path.join(dir, file))
         })
+        // SEND NOTIFICATIONS TO SLACK
+        request({
+            'method': 'GET',
+            'uri': `${process.env.MLAB_URL}${process.env.MONGO_DB}/collections/${process.env.MONGO_COLLECTION}?c=true&apiKey=${process.env.MLAB_APIKEY}`,
+            'json': true
+        }, (err, resp, count) => {
+            if (err) console.error(err)
+            request({
+                'method': 'POST',
+                'uri': process.env.SLACK_WEBHOOK,
+                'body': {
+                'text': `Just now, coffee number ${count} was poured. <http://www.lavazza.space|Find out more>.`,
+                'icon_emoji': ':coffee:',
+                'username': 'Lavazza ©',
+                    'channel': '#drinks'
+                },
+                'json': true
+            }, (err, resp, body) => {
+                if (err) console.error('ERROR notifying via Slack ' + JSON.stringify(err))
+                else console.log('Slack was correctly notified: ' + body /* should be 'ok' */)
+            })
+        })
       }
     })
 
-    // SEND NOTIFICATIONS TO SLACK
-    request({
-      'method': 'GET',
-      'uri': `${process.env.MLAB_URL}${process.env.MONGO_DB}/collections/${process.env.MONGO_COLLECTION}?c=true&apiKey=${process.env.MLAB_APIKEY}`,
-      'json': true
-    }, (err, resp, count) => {
-      if (err) console.error(err)
-      request({
-        'method': 'POST',
-        'uri': process.env.SLACK_WEBHOOK,
-        'body': {
-          'text': `Just now, coffee number ${count} was poured. <http://www.lavazza.space|Find out more>.`,
-          'icon_emoji': ':coffee:',
-          'username': 'Lavazza ©',
-          'channel': '#test'
-        },
-        'json': true
-      }, (err, resp, body) => {
-        if (err) console.error('ERROR notifying via Slack ' + JSON.stringify(err))
-        else console.log('Slack was correctly notified: ' + body /* should be 'ok' */)
-      })
-    })
 
   // NEW, UNKNOWN BUTTON FOUND
   } else {
