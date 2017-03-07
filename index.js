@@ -112,12 +112,9 @@ dash.on('detected', function (dashId) {
         console.log('ERROR sending stuff to mlab via request: ' + JSON.stringify(err))
       } else {
         console.log(`💾  And another coffee consumption saved in db.`)
-        // provide feedback
-        const dir = path.join(__dirname, 'assets/coffee')
-        randomFile(dir, (err, file) => {
-          if (err) console.log(err)
-          else player.play(path.join(dir, file))
-        })
+        // provide feedback that button press was taken into account
+        player.play('./assets/water-drop.mp3')
+
         // SEND NOTIFICATIONS TO SLACK
         request({
             'method': 'GET',
