@@ -129,7 +129,7 @@ dash.on('detected', function (dashId) {
                 'text': `Just now, coffee number ${count} was poured. <http://www.lavazza.space|Find out more>.`,
                 'icon_emoji': ':coffee:',
                 'username': 'Lavazza ©',
-                    'channel': '#drinks'
+                    'channel': '#lavazza'
                 },
                 'json': true
             }, (err, resp, body) => {
