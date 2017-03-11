@@ -20,10 +20,9 @@
     "node-persist": "^2.0.7",
     "play-sound": "^1.1.1",
     "request": "^2.79.0",
-    "select-random-file": "^1.1.0",
+    "slack-webhook": "^1.0.0",
     "twilio": "^2.11.1"
   },
-  "devDependencies": {},
   "repository": {
     "type": "git",
     "url": "ssh://git@github.com/jfix/dash-button.git"

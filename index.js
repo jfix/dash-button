@@ -8,6 +8,7 @@ const moment = require('moment')
 const storage = require('node-persist')
 const player = require('play-sound')()
 const request = require('request')
+const SlackWebhook = require('slack-webhook')
 
 const weekdays = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']
 
@@ -121,20 +122,14 @@ dash.on('detected', function (dashId) {
           'json': true
         }, (err, resp, count) => {
           if (err) console.error(err)
-          request({
-            'method': 'POST',
-            'uri': process.env.SLACK_WEBHOOK,
-            'body': {
-              'text': `Just now, coffee number ${count} was poured. <http://www.lavazza.space|Find out more>.`,
-              'icon_emoji': ':coffee:',
-              'username': 'Lavazza ©',
-              'channel': '#drinks'
-            },
-            'json': true
-          }, (err, resp, body) => {
-            if (err) console.error('ERROR notifying via Slack ' + JSON.stringify(err))
-            else console.log('Slack was correctly notified: ' + body /* should be 'ok' */)
-          })
+
+          const slackOptions = { defaults: { username: 'Lavazza ©', channel: '#lavazza', icon_emoji: ':coffee:' } }
+          const slack = new SlackWebhook(process.env.SLACK_WEBHOOK, slackOptions)
+          slack.send(`Just now, coffee number ${count} was poured. <http://www.lavazza.space|Find out more>.`)
+            .then(
+              (body) => console.log(`Slack was correctly notified: ${body}`),
+              (err) => console.error(`ERROR notifying via Slack ${JSON.stringify(err)}`)
+            )
         })
       }
     })
