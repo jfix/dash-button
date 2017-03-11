@@ -12,7 +12,7 @@ const randomFile = require('select-random-file')
 
 const weekdays = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']
 
-storage.initSync({ttl: 8 * 60 * 60 * 1000})
+storage.initSync({ttl: 8 * 60 * 60 * 1000, forgiveParseErrors: true})
 
 function isMorning () {
   const currentHour = new Date().getHours()
@@ -129,7 +129,7 @@ dash.on('detected', function (dashId) {
                 'text': `Just now, coffee number ${count} was poured. <http://www.lavazza.space|Find out more>.`,
                 'icon_emoji': ':coffee:',
                 'username': 'Lavazza ©',
-                    'channel': '#drinks'
+                    'channel': '#lavazza'
                 },
                 'json': true
             }, (err, resp, body) => {
