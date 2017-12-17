@@ -39,7 +39,7 @@ dash.on('detected', function (dashId) {
         storage.setItemSync('morning_sms', true)
       } else {
         console.log('✗ Not sending SMS as it already has been sent.'.yellow)
-        player.play('./assets/buzzer.mp3')
+        player.play(path.join(__dirname, 'assets/buzzer.mp3'))
         doSend = false
       }
     } else if (isEvening()) {
@@ -48,7 +48,7 @@ dash.on('detected', function (dashId) {
         storage.setItemSync('evening_sms', true)
       } else {
         console.log('✗ Not sending SMS as it already has been sent.'.yellow)
-        player.play('./assets/buzzer.mp3')
+        player.play(path.join(__dirname, 'assets/buzzer.mp3'))
         doSend = false
       }
     } else {
@@ -66,10 +66,10 @@ dash.on('detected', function (dashId) {
       }, function (err, msg) {
         if (err) {
           console.log(`Problem sending SMS ${JSON.stringify(err)}`.red)
-          player.play('./assets/buzzer.mp3')
+          player.play(path.join(__dirname, 'assets/buzzer.mp3'))
         } else {
           console.log(`SMS sent with ID ${msg.sid}`.green)
-          player.play('./assets/swoosh.mp3')
+          player.play(path.join(__dirname, 'assets/swoosh.mp3'))
         }
       })
     }
@@ -81,23 +81,23 @@ dash.on('detected', function (dashId) {
     console.log(`☕️  ${formattedDate} ${formattedTime}: Somebody just poured a coffee.`)
 
     // IFTTT APPROACH
-    request({
-      url: process.env.IFTTT,
-      method: 'POST',
-      json: {'value1': formattedDate, 'value2': formattedTime, 'value3': 1}
-    }, function (err, res, body) {
-      if (err) {
-        console.log('ERRROR: ' + JSON.stringify(err))
-      }
-      console.log(body)
-    })
+    //request({
+    //  url: process.env.IFTTT,
+    //  method: 'POST',
+    //  json: {'value1': formattedDate, 'value2': formattedTime, 'value3': 1}
+    //}, function (err, res, body) {
+    //  if (err) {
+    //    console.log('ERRROR: ' + JSON.stringify(err))
+    //  }
+    //  console.log(body)
+    //})
 
     // SAVE DATA INTO MONGO DB
     const date = moment()
     const mlabUrl = `${process.env.MLAB_URL}${process.env.MONGO_DB}/collections/${process.env.MONGO_COLLECTION}?apiKey=${process.env.MLAB_APIKEY}`
 
     const consommation = {
-      date: {'$date': date},
+      date: {'$date': date.toISOString()},
       month: date.month(),
       week: date.week(),
       weekday: weekdays[date.weekday()],
@@ -113,7 +113,9 @@ dash.on('detected', function (dashId) {
       } else {
         console.log(`💾  And another coffee consumption saved in db.`)
         // provide feedback that button press was taken into account
-        player.play('./assets/water-drop.mp3')
+        player.play(path.join(__dirname, 'assets/water-drop.mp3'), (err) => {
+		if (err) console.log(`Error playing sound: ${err}.`)
+	})
 
         // SEND NOTIFICATIONS TO SLACK
         request({
@@ -121,7 +123,7 @@ dash.on('detected', function (dashId) {
           'uri': `${process.env.MLAB_URL}${process.env.MONGO_DB}/collections/${process.env.MONGO_COLLECTION}?c=true&apiKey=${process.env.MLAB_APIKEY}`,
           'json': true
         }, (err, resp, count) => {
-          if (err) console.error(err)
+          if (err) console.error(`Error retrieving count from mLab: ${err}`)
 
           const slackOptions = { defaults: { username: 'Lavazza ©', channel: '#lavazza', icon_emoji: ':coffee:' } }
           const slack = new SlackWebhook(process.env.SLACK_WEBHOOK, slackOptions)
