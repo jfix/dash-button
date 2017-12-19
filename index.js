@@ -86,9 +86,9 @@ dash.on('detected', function (dashId) {
       json: {'value1': formattedDate, 'value2': formattedTime, 'value3': 1}
     }, function (err, res, body) {
       if (err) {
-        console.log('ERRROR: ' + JSON.stringify(err))
+        console.log(`IFTTT error: ${JSON.stringify(err)}`.error)
       }
-      console.log(body)
+      console.log(`IFTTT success: ${body}`.green)
     })
 
     // SAVE DATA INTO MONGO DB
@@ -108,12 +108,12 @@ dash.on('detected', function (dashId) {
       json: consommation
     }, function (err, res, body) {
       if (err) {
-        console.log('ERROR sending stuff to mlab via request: ' + JSON.stringify(err))
+        console.log(`MLAB Error: Send stuff to mlab via request: ${JSON.stringify(err)}`.error)
       } else {
-        console.log(`💾  And another coffee consumption saved in db.`)
+        console.log(`💾  And another coffee consumption saved in db.`.green)
         // provide feedback that button press was taken into account
         player.play(path.join(__dirname, 'assets/water-drop.mp3'), (err) => {
-		if (err) console.log(`Error playing sound: ${err}.`)
+		if (err) console.log(`Sound play error: ${err}.`.error)
 	})
 
         // SEND NOTIFICATIONS TO SLACK
@@ -122,8 +122,8 @@ dash.on('detected', function (dashId) {
           'uri': `${process.env.MLAB_URL}${process.env.MONGO_DB}/collections/${process.env.MONGO_COLLECTION}?c=true&apiKey=${process.env.MLAB_APIKEY}`,
           'json': true
         }, (err, resp, count) => {
-          if (err) console.error(`Error retrieving count from mLab: ${err}`)
-	  else console.log(`MLAB: current coffee count: ${count}.`)
+          if (err) console.error(`MLAB Error retrieving count from mLab: ${err}`.red)
+	  else console.log(`MLAB Success: current coffee count: ${count}.`.green)
 
           const slackOptions = { username: 'Lavazza ©', channel: '#lavazza', icon_emoji: ':coffee:', 'text': `Someone just poured coffee #${count}!` }
 	  request({
@@ -131,8 +131,8 @@ dash.on('detected', function (dashId) {
 		'uri': `${process.env.SLACK_WEBHOOK}`,
 		'json': slackOptions
 	  }, (err, resp) => {
-		if (err) console.log(`Slack Error: ${JSON.stringify(err)}`)
-		else console.log(`Tout va bien ! ${JSON.stringify(resp.body)}.`)
+		if (err) console.log(`Slack Error: ${JSON.stringify(err)}`.red)
+		else console.log(`Slack Success: ${JSON.stringify(resp.body)}.`.green)
 	  })
         })
       }
