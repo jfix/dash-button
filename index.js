@@ -8,7 +8,6 @@ const moment = require('moment')
 const storage = require('node-persist')
 const player = require('play-sound')()
 const request = require('request')
-const SlackWebhook = require('slack-webhook')
 
 const weekdays = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']
 
@@ -81,16 +80,16 @@ dash.on('detected', function (dashId) {
     console.log(`☕️  ${formattedDate} ${formattedTime}: Somebody just poured a coffee.`)
 
     // IFTTT APPROACH
-    //request({
-    //  url: process.env.IFTTT,
-    //  method: 'POST',
-    //  json: {'value1': formattedDate, 'value2': formattedTime, 'value3': 1}
-    //}, function (err, res, body) {
-    //  if (err) {
-    //    console.log('ERRROR: ' + JSON.stringify(err))
-    //  }
-    //  console.log(body)
-    //})
+    request({
+      url: process.env.IFTTT,
+      method: 'POST',
+      json: {'value1': formattedDate, 'value2': formattedTime, 'value3': 1}
+    }, function (err, res, body) {
+      if (err) {
+        console.log('ERRROR: ' + JSON.stringify(err))
+      }
+      console.log(body)
+    })
 
     // SAVE DATA INTO MONGO DB
     const date = moment()
@@ -124,14 +123,17 @@ dash.on('detected', function (dashId) {
           'json': true
         }, (err, resp, count) => {
           if (err) console.error(`Error retrieving count from mLab: ${err}`)
+	  else console.log(`MLAB: current coffee count: ${count}.`)
 
-          const slackOptions = { defaults: { username: 'Lavazza ©', channel: '#lavazza', icon_emoji: ':coffee:' } }
-          const slack = new SlackWebhook(process.env.SLACK_WEBHOOK, slackOptions)
-          slack.send(`Just now, coffee number ${count} was poured. <http://www.lavazza.space|Find out more>.`)
-            .then(
-              (body) => console.log(`Slack was correctly notified: ${body}`),
-              (err) => console.error(`ERROR notifying via Slack ${JSON.stringify(err)}`)
-            )
+          const slackOptions = { username: 'Lavazza ©', channel: '#lavazza', icon_emoji: ':coffee:', 'text': `Someone just poured coffee #${count}!` }
+	  request({
+		'method': 'POST',
+		'uri': `${process.env.SLACK_WEBHOOK}`,
+		'json': slackOptions
+	  }, (err, resp) => {
+		if (err) console.log(`Slack Error: ${JSON.stringify(err)}`)
+		else console.log(`Tout va bien ! ${JSON.stringify(resp.body)}.`)
+	  })
         })
       }
     })
