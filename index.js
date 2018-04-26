@@ -123,17 +123,17 @@ dash.on('detected', function (dashId) {
           'json': true
         }, (err, resp, count) => {
           if (err) console.error(`MLAB Error retrieving count from mLab: ${err}`.red)
-	  else console.log(`MLAB Success: current coffee count: ${count}.`.green)
+          else console.log(`MLAB Success: current coffee count: ${count}.`.green)
 
           const slackOptions = { username: 'Lavazza ©', channel: '#lavazza', icon_emoji: ':coffee:', 'text': `Someone just poured coffee #${count}!` }
-	  request({
-		'method': 'POST',
-		'uri': `${process.env.SLACK_WEBHOOK}`,
-		'json': slackOptions
-	  }, (err, resp) => {
-		if (err) console.log(`Slack Error: ${JSON.stringify(err)}`.red)
-		else console.log(`Slack Success: ${JSON.stringify(resp.body)}.`.green)
-	  })
+          request({
+            'method': 'POST',
+            'uri': `${process.env.SLACK_WEBHOOK}`,
+            'json': slackOptions
+          }, (err, resp) => {
+            if (err) console.log(`Slack Error: ${JSON.stringify(err)}`.red)
+            else console.log(`Slack Success: ${JSON.stringify(resp.body)}.`.green)
+          })
         })
       }
     })
